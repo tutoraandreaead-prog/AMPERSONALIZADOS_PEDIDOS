@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {initialState,normalize,validateList,normalizeCatalog,addCatalogUpdates,searchText} from '../netlify/lib/validation.mjs';
+const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+const start=html.indexOf('function mergeBackup('),end=html.indexOf("$('restoreBtn').onclick",start);
+const merger=new Function('orders','catalog','deletedOrders','validateList','normalizeCatalog','addCatalogUpdates','searchText','return ('+html.slice(start,end).trim()+')');
+const sample=normalize({id:1017,client:'Teste',date:'2026-10-16',items:[{product:'Caneca',qty:1,price:30}],discount:0,paymentStatus:'A pagar',payment:'Pix',stage:'Recebido',due:'',notes:'',deliveryNote:''});
+const merge=(orders,catalog=initialState().catalog,deleted=[])=>merger(orders,catalog,deleted,validateList,normalizeCatalog,addCatalogUpdates,searchText);
+test('backup repetido não duplica um pedido idêntico',()=>{const next=merge([sample])({orders:[sample]});assert.equal(next.orders.length,1);assert.equal(next.skipped,1)});
+test('pedidos diferentes com o mesmo número são preservados com novo número',()=>{const next=merge([sample])({orders:[{...sample,client:'Outro cliente'}]});assert.equal(next.orders.length,2);assert.equal(next.orders[1].id,1018);assert.equal(next.renumbered,1);assert.match(next.orders[1].notes,/1017/);const again=merge(next.orders)( {orders:[{...sample,client:'Outro cliente'}]});assert.equal(again.orders.length,2)});
+test('mesmo nome de produto mantém preço online e informa conflito',()=>{const next=merge([])({orders:[],catalog:[{name:'Arte DTF',price:100}]});assert.equal(next.catalog.find(p=>p.name==='Arte DTF').price,90);assert.equal(next.priceConflicts,1)});
+test('backup antigo sem catálogo converte o pedido e mantém produtos',()=>{const legacy={...sample,items:undefined,product:'Caneca antiga',qty:2,price:25};const next=merge([])([legacy]);assert.equal(next.orders[0].items[0].price,25);assert.equal(next.catalog.length,34)});

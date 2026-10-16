@@ -1,0 +1,4 @@
+import {validateState,initialState} from './validation.mjs';
+const KEY='state';
+export async function readState(store){let entry=await store.getWithMetadata(KEY,{type:'json'});if(!entry){await store.setJSON(KEY,{...initialState(),revision:1,updatedAt:new Date().toISOString()},{onlyIfNew:true});entry=await store.getWithMetadata(KEY,{type:'json'})}if(!entry)throw Error('Armazenamento indisponível.');return entry}
+export async function saveState(store,input){const state=validateState(input),entry=await readState(store);if(!Number.isSafeInteger(input.revision)||input.revision!==entry.data.revision)return {conflict:true};const next={...state,revision:entry.data.revision+1,updatedAt:new Date().toISOString()};const saved=await store.setJSON(KEY,next,{onlyIfMatch:entry.etag});if(!saved.modified)return {conflict:true};return {revision:next.revision,updatedAt:next.updatedAt}}
