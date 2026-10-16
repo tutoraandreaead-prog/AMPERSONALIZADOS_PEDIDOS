@@ -1,0 +1,12 @@
+ATELIÊ AM PERSONALIZADOS — SISTEMA HTML
+
+1. Abra index.html no Chrome, Edge ou Firefox. Não exige instalação.
+2. Para o GitHub Pages, envie index.html para a raiz do repositório e habilite Pages nas configurações do GitHub. A arte, os estilos e o JavaScript estão incorporados no HTML.
+3. Antes de publicar: este arquivo inclui os 16 pedidos da planilha, com nomes e valores. Os dados iniciais são visíveis no código do arquivo para quem tiver acesso ao arquivo ou ao site. O HTML não possui login ou proteção de acesso.
+4. Os novos pedidos e alterações são salvos no armazenamento do navegador. Não são gravados no GitHub nem sincronizados entre dispositivos ou usuários.
+5. Use Salvar backup (JSON) regularmente. Para mudar de navegador, computador ou endereço (inclusive do arquivo local para GitHub Pages), faça backup no sistema antigo e restaure no novo.
+6. As fontes estão maiores e com contraste reforçado. O botão A+ aumenta ainda mais as letras.
+7. Catálogo com 32 produtos e preços fornecidos. A seleção do catálogo preenche produto e valor unitário automaticamente. Os valores de pedidos existentes não são atualizados ao abrir ou salvar. Para aplicar o preço atual a um pedido existente, selecione o produto no catálogo. Squeeze e Body infantil estão cadastrados a R$ 0,00 conforme a tabela e exibem um aviso de conferência.
+8. Melhorias: identidade visual da arte original, busca sem diferença de acentos, ordenação por número/cliente/prazo, limpeza de filtros, cadastro e edição, cálculo de desconto, impressão, exportação CSV e backup JSON.
+
+As observações originais de desconto foram preservadas sem alterar os totais da planilha. Informe um desconto explícito no cadastro para aplicá-lo ao total.
